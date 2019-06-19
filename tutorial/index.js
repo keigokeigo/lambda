@@ -3,6 +3,7 @@ var AWS = require('aws-sdk');
 var gm = require('gm')
             .subClass({ imageMagick: true }); // Enable ImageMagick integration.
 var util = require('util');
+const path = require('path');
 
 var MAX_WIDTH  = 100;
 var MAX_HEIGHT = 100;
@@ -28,7 +29,8 @@ exports.handler = function(event, context, callback) {
         callback('Unsupported image type: ${imageType}');
         return;
     }
-    var dstKey    = typeMatch[1] + "-thumbnail." + typeMatch[2];
+    var dstKey    = "thumbnail/" + path.basename(srcKey);
+    console.info("destination key is '" + dstKey + "'.");
 
     // Download the image from S3, transform, and upload to a different S3 bucket.
     async.waterfall([
